@@ -1,16 +1,12 @@
 <ion-view view-title="Surah {{surahId}}">
 	<ion-content class="surah-view">
-		<ion-list dir="rtl" ng-repeat="ayah in surah">
-			<ion-item class="item-text-wrap">
-				<div class="row">
-					<div class="col">{{ayah.number}}</div>
-					<div class="col" ng-repeat="word in ayah.words">{{word.ar}}</div>
-				</div>
-				<div class="row">
-					<div class="col">{{ayah.number}}</div>
-					<div class="col" ng-repeat="word in ayah.words">{{word.en}}</div>
-				</div>
-			</ion-item>
+		<ion-list ng-repeat="ayah in surah">
+				<ion-item on-swipe-right="onSwipeRight(word)" on-swipe-left="onSwipeLeft(word)" ng-repeat="word in ayah.words" item="word" class="row {{word.className}}">
+					<ul>
+						<li>{{word.ar}}</li>
+						<li>{{word.en}}</li>
+					</ul>
+				</ion-item>
 		</ion-list>
 	</ion-content>
 </ion-view>

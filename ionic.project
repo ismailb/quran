@@ -1,6 +1,6 @@
 {
   "name": "quran",
-  "app_id": "",
+  "app_id": "d7600b61",
   "gulpStartupTasks": [
     "sass",
     "watch"

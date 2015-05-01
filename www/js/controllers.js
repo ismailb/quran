@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['starter.services'])
+angular.module('starter.controllers', ['starter.services', 'starter.utils'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
     // Form data for the login modal
@@ -33,55 +33,23 @@ angular.module('starter.controllers', ['starter.services'])
       }, 1000);
     };
   })
-  .controller('SurahCtrl', function($scope, $stateParams, QuranService) {
-    console.log('SurahCtrl');
-    var q = QuranService.get({
-      surahId: $stateParams.surahId
-    });
-    q.$promise.then(function(response) {
-      var surahObj = response.quran['quran-wordbyword'];
-      var surah = [];
-      $.each(surahObj, function(key, value) {
-        var fullVerse = value.verse;
-        var words = [];
-        var ayah = {};
-        $.each(fullVerse.split('$'), function(idx, verse) {
-          if (verse) {
-            var word = {};
-            var wordByLang = verse.split('|');
-            word["ar"] = wordByLang[0];
-            word["en"] = wordByLang[1];
-            words.push(word);
-          }
-        });
-        ayah.number = key;
-        ayah.words = words;
-        surah.push(ayah); //[value.ayah] 
-      });
-      console.log(surah);
-      $scope.surah = surah;
-    });
-  })
-  .controller('PlaylistsCtrl', function($scope) {
-    $scope.playlists = [{
-      title: 'Reggae',
-      id: 1
-    }, {
-      title: 'Chill',
-      id: 2
-    }, {
-      title: 'Dubstep',
-      id: 3
-    }, {
-      title: 'Indie',
-      id: 4
-    }, {
-      title: 'Rap',
-      id: 5
-    }, {
-      title: 'Cowbell',
-      id: 6
-    }];
-  })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {});
+  .controller('SurahCtrl', function($scope, $stateParams, QuranService, LocalStorage) {
+    console.log('SurahCtrl');
+    console.log($stateParams.surahId);    
+    var surah = QuranService.getSurah($stateParams.surahId);
+    surah.then(function(response){
+      $scope.surah = response;
+
+    });
+    $scope.onSwipeRight = function(item){
+      console.log('right');
+      item.className = "item item-energized";
+      LocalStorage.set(item.ar, null);
+    };
+    $scope.onSwipeLeft = function(item){
+      console.log('left');
+      item.className = "item item-balanced";
+      LocalStorage.set(item.ar, item.en);
+    };
+  });
